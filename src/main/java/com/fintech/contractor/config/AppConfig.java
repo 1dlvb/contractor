@@ -10,8 +10,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
+import java.util.Objects;
 
 /**
  * Configuration file for spring boot application
@@ -30,6 +34,11 @@ public class AppConfig {
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(LocalContainerEntityManagerFactoryBean entityManagerFactory) {
+        return new JpaTransactionManager(Objects.requireNonNull(entityManagerFactory.getObject()));
     }
 
     @Bean
